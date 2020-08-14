@@ -1,0 +1,149 @@
+apply plugin: 'com.android.application'
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+//根build.gradle 第三方库版本号管理
+def libs = rootProject.ext.libraries
+def cfg = rootProject.ext.configuration
+def testLibs = rootProject.ext.testlibraries
+def comLibs = rootProject.ext.comlibraries
+
+
+//本地properties文件配置数据
+Properties properties = new Properties()
+def writer = project.rootProject.file('local_config.properties')
+properties.load(writer.newDataInputStream())
+def verCode = properties.getProperty("mainVersionCode")
+def appVersionName = properties.getProperty("mainVersionName")
+def appversionCode = verCode.toInteger()
+def runTasks = gradle.startParameter.taskNames
+
+
+android {
+    compileSdkVersion cfg.compileSdkVersion
+    buildToolsVersion cfg.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.example.mvvmdemo"
+        minSdkVersion cfg.minSdkVersion
+        targetSdkVersion cfg.targetSdkVersion
+        versionCode appversionCode
+        versionName appVersionName
+        flavorDimensions "default"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // Enabling multidex support.
+        multiDexEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'com.bandeng.MyEventBusIndex']
+            }
+        }
+
+        //设置支持的so库架构类型
+        ndk {
+            abiFilters 'armeabi', "armeabi-v7a", "x86"
+        }
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$comLibs.appcompat"
+    implementation "androidx.constraintlayout:constraintlayout:$comLibs.constraintlayout"
+    implementation "com.google.android.material:material:$comLibs.material"
+    implementation "androidx.lifecycle:lifecycle-extensions:$comLibs.lifecycle"
+    //google官方下拉刷新控件
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$comLibs.swiperefreshlayout"
+    //为了使用谷歌最新的MergeAdapter导入新版本的库 by Leo
+    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha05"
+    //paging
+    implementation "androidx.paging:paging-runtime:$comLibs.paging"
+    //谷歌分包方案，解决方法数最大值65536限制(api21以下需要该库)
+    implementation "androidx.multidex:multidex:$comLibs.multidex"
+
+    //zxing
+    implementation "com.google.zxing:core:$comLibs.zxing"
+
+    //hilt
+    implementation "com.google.dagger:hilt-android:$comLibs.hilt"
+    kapt "com.google.dagger:hilt-android-compiler:$comLibs.hilt"
+//    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$comLibs.hiltViewModel"
+//    implementation "androidx.hilt:hilt-compiler:$comLibs.hiltViewModel"
+
+    //====================测试库=========================
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation "junit:junit:$testLibs.junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$testLibs.extJunit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$testLibs.espressoCore"
+
+    //===========================第三方库===============================
+
+    //evenbus
+    implementation "org.greenrobot:eventbus:$libs.eventbus"
+    //annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
+
+
+    //leakcanary内存泄漏检测
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$libs.leakcanary"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$libs.leakcanary"
+
+    //gson
+    implementation "com.google.code.gson:gson:$libs.gson"
+
+    //glide图片加载库
+    implementation "com.github.bumptech.glide:glide:$libs.glide"
+    implementation "com.github.bumptech.glide:okhttp3-integration:$libs.glide@aar"
+    implementation "com.github.bumptech.glide:annotations:$libs.glide"
+    annotationProcessor "com.github.bumptech.glide:compiler:$libs.glide"
+
+    //okhttp
+    implementation "com.squareup.okhttp3:okhttp:$libs.okhttp"
+    implementation "com.squareup.okhttp3:logging-interceptor:$libs.okhttpLogging" //okhttp日志拦截器
+
+    //rxandroid
+    implementation "io.reactivex.rxjava2:rxjava:$libs.rxjava"
+    implementation "io.reactivex.rxjava2:rxandroid:$libs.rxandroid"
+    //retrofit
+    implementation "com.squareup.retrofit2:retrofit:$libs.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$libs.retrofit"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$libs.retrofit"
+
+    //兼容kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$libs.kotlin"
+    //屏幕适配
+    implementation "me.jessyan:autosize:$libs.autosize"
+
+    //bugly
+    implementation "com.tencent.bugly:crashreport_upgrade:$libs.bugly"
+    implementation "com.tencent.bugly:nativecrashreport:$libs.bugly"
+
+
+}
