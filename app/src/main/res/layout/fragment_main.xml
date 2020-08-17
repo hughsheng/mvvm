@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        tools:context=".MainActivity">
+        tools:context=".home.ui.MainActivity">
 
         <include layout="@layout/activity_container_toolbar" />
     </LinearLayout>

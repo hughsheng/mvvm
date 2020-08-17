@@ -1,4 +1,4 @@
-package com.example.mvvmdemo;
+package com.example.mvvmdemo.home.data;
 
 /**
  * created by tl

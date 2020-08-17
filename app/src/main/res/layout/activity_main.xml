@@ -8,7 +8,7 @@
 
         <variable
             name="user"
-            type="com.example.mvvmdemo.UserBean" />
+            type="com.example.mvvmdemo.home.data.UserBean" />
     </data>
 
     <LinearLayout
@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        tools:context=".MainActivity">
+        tools:context=".home.ui.MainActivity">
 
         <include
             android:id="@+id/container"

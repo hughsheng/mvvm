@@ -38,7 +38,7 @@ android {
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [eventBusIndex: 'com.bandeng.MyEventBusIndex']
+                arguments += [eventBusIndex: 'com.bandeng.MyEventBusIndex']
             }
         }
 
@@ -94,8 +94,8 @@ dependencies {
     //hilt
     implementation "com.google.dagger:hilt-android:$comLibs.hilt"
     kapt "com.google.dagger:hilt-android-compiler:$comLibs.hilt"
-//    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$comLibs.hiltViewModel"
-//    implementation "androidx.hilt:hilt-compiler:$comLibs.hiltViewModel"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$comLibs.hiltViewModel"
+    kapt "androidx.hilt:hilt-compiler:$comLibs.hiltViewModel"
 
     //====================测试库=========================
     implementation 'androidx.appcompat:appcompat:1.2.0'
