@@ -1,9 +1,7 @@
 package com.example.mvvmdemo.home.data;
 
 import androidx.hilt.lifecycle.ViewModelInject;
-import androidx.lifecycle.ViewModel;
-
-import javax.inject.Inject;
+import com.example.mvvmdemo.base.BaseViewModel;
 
 /**
  * created by tl
@@ -11,7 +9,7 @@ import javax.inject.Inject;
  * 从仓库获取数据并处理成界面展示需要的数据
  */
 
-public class  MainViewModel extends ViewModel {
+public class  MainViewModel extends BaseViewModel {
 
     private MainRepository mainRepository;
 

@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        tools:context=".home.ui.MainActivity">
+        tools:context=".home.ui.MainDataBindingActivity">
 
         <include
             android:id="@+id/container"
