@@ -4,12 +4,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-//根build.gradle 第三方库版本号管理
-def libs = rootProject.ext.libraries
-def cfg = rootProject.ext.configuration
-def testLibs = rootProject.ext.testlibraries
-def comLibs = rootProject.ext.comlibraries
-
 
 //本地properties文件配置数据
 Properties properties = new Properties()
@@ -22,13 +16,13 @@ def runTasks = gradle.startParameter.taskNames
 
 
 android {
-    compileSdkVersion cfg.compileSdkVersion
-    buildToolsVersion cfg.buildToolsVersion
+    compileSdkVersion BuildConfig.compileSdkVersion
+    buildToolsVersion BuildConfig.buildToolsVersion
 
     defaultConfig {
         applicationId "com.example.mvvmdemo"
-        minSdkVersion cfg.minSdkVersion
-        targetSdkVersion cfg.targetSdkVersion
+        minSdkVersion BuildConfig.minSdkVersion
+        targetSdkVersion BuildConfig.targetSdkVersion
         versionCode appversionCode
         versionName appVersionName
         flavorDimensions "default"
@@ -75,75 +69,75 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "androidx.appcompat:appcompat:$comLibs.appcompat"
-    implementation "androidx.constraintlayout:constraintlayout:$comLibs.constraintlayout"
-    implementation "com.google.android.material:material:$comLibs.material"
-    implementation "androidx.lifecycle:lifecycle-extensions:$comLibs.lifecycle"
+    implementation project(path: ':mvvmlibrary')
+    implementation project(path: ':httplibrary')
+    implementation AndroidX.appcompat
+    implementation AndroidX.constraintlayout
+    implementation Android.meteria
+    implementation AndroidX.lifeCycleExtension
+    implementation AndroidX.lifecycleRuntime
     //google官方下拉刷新控件
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$comLibs.swiperefreshlayout"
+    implementation AndroidX.swiperefreshlayout
     //为了使用谷歌最新的MergeAdapter导入新版本的库 by Leo
-    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha05"
+    implementation AndroidX.recyclerview
     //paging
-    implementation "androidx.paging:paging-runtime:$comLibs.paging"
+    implementation AndroidX.pagingRuntime
     //谷歌分包方案，解决方法数最大值65536限制(api21以下需要该库)
-    implementation "androidx.multidex:multidex:$comLibs.multidex"
+    implementation AndroidX.multidex
 
     //zxing
-    implementation "com.google.zxing:core:$comLibs.zxing"
+    implementation Android.zxing
 
     //hilt
-    implementation "com.google.dagger:hilt-android:$comLibs.hilt"
-    kapt "com.google.dagger:hilt-android-compiler:$comLibs.hilt"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$comLibs.hiltViewModel"
-    kapt "androidx.hilt:hilt-compiler:$comLibs.hiltViewModel"
+    implementation Hilt.daggerRuntime
+    kapt Hilt.daggerCompiler
+    implementation Hilt.viewModule
+    kapt Hilt.compiler
 
     //====================测试库=========================
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation "junit:junit:$testLibs.junitVersion"
-    androidTestImplementation "androidx.test.ext:junit:$testLibs.extJunit"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$testLibs.espressoCore"
+    testImplementation Depend.junit
+    androidTestImplementation Depend.androidTestJunit
+    androidTestImplementation Depend.espressoCore
 
     //===========================第三方库===============================
 
     //evenbus
-    implementation "org.greenrobot:eventbus:$libs.eventbus"
+    implementation EventBus.eventBus
     //annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
 
 
     //leakcanary内存泄漏检测
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$libs.leakcanary"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$libs.leakcanary"
+    debugImplementation Leakcanary.open
+    releaseImplementation Leakcanary.close
 
     //gson
-    implementation "com.google.code.gson:gson:$libs.gson"
+    implementation Gson.runtime
 
     //glide图片加载库
-    implementation "com.github.bumptech.glide:glide:$libs.glide"
-    implementation "com.github.bumptech.glide:okhttp3-integration:$libs.glide@aar"
-    implementation "com.github.bumptech.glide:annotations:$libs.glide"
-    annotationProcessor "com.github.bumptech.glide:compiler:$libs.glide"
+    implementation Glide.runtime
+    implementation Glide.okhttp3Integration
+    implementation Glide.annotations
+    annotationProcessor Glide.compiler
 
-    //okhttp
-    implementation "com.squareup.okhttp3:okhttp:$libs.okhttp"
-    implementation "com.squareup.okhttp3:logging-interceptor:$libs.okhttpLogging" //okhttp日志拦截器
 
     //rxandroid
-    implementation "io.reactivex.rxjava2:rxjava:$libs.rxjava"
-    implementation "io.reactivex.rxjava2:rxandroid:$libs.rxandroid"
+    implementation Rxandroid.rxjava2
+    implementation Rxandroid.rxandroid
+
     //retrofit
-    implementation "com.squareup.retrofit2:retrofit:$libs.retrofit"
-    implementation "com.squareup.retrofit2:converter-gson:$libs.retrofit"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$libs.retrofit"
+    implementation Retrofit.runtime
+    implementation Retrofit.gson
+    implementation Retrofit.adapter
+    implementation Retrofit.logging
 
     //兼容kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$libs.kotlin"
+    implementation Kt.stdlibJdk7
+
     //屏幕适配
-    implementation "me.jessyan:autosize:$libs.autosize"
+    implementation AutoSize.runtime
 
     //bugly
-    implementation "com.tencent.bugly:crashreport_upgrade:$libs.bugly"
-    implementation "com.tencent.bugly:nativecrashreport:$libs.bugly"
-
+    implementation Bugly.upgrade
+    implementation Bugly.nativecrashreport
 
 }
