@@ -2,13 +2,11 @@ package com.example.httplibrary;
 
 import android.content.Context;
 
-import com.example.mvvmdemo.BuildConfig;
-import com.example.mvvmdemo.base.api.interceptor.CacheInterceptor;
-import com.example.mvvmdemo.base.api.interceptor.HeadInterceptor;
-import com.example.mvvmdemo.base.api.interceptor.ParamsInterceptor;
-import com.example.mvvmdemo.base.api.interceptor.ResponseInterceptor;
-import com.example.mvvmdemo.base.api.interceptor.VerificationInterceptor;
-import com.example.mvvmdemo.base.app.AppApplication;
+import com.example.httplibrary.interceptor.CacheInterceptor;
+import com.example.httplibrary.interceptor.HeadInterceptor;
+import com.example.httplibrary.interceptor.ParamsInterceptor;
+import com.example.httplibrary.interceptor.ResponseInterceptor;
+import com.example.httplibrary.interceptor.VerificationInterceptor;
 
 import java.io.File;
 import java.io.InputStream;
@@ -47,47 +45,36 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 @Module
 @InstallIn(ApplicationComponent.class)
-public class ApiServiceModule {
-    public static final String TAG = ApiServiceModule.class.getSimpleName();
-    public static final int CACHE_TIME = 24 * 60 * 60;  //无网络保存缓存数据时间
+public abstract class BaseApiServiceModule implements HttpSettingImpl {
 
     /**
      * okhttp的一些参数设置常量(秒级单位)
      */
-    private static final int READ_TIME = 30;
-    private static final int WRITE_TIME = 30;
-    private static final int CONNECT_TIME = 5;
-    private static final int CACHE_SIZE = 1024 * 1024 * 50;  //50M
-    private String mBaseUrl = "";
-    private Context mContext;
+    private final int CACHE_TIME = getCatchTime();  //无网络保存缓存数据时间
+    private final int READ_TIME = getReadTime();
+    private final int WRITE_TIME = getWriteTime();
+    private final int CONNECT_TIME = getConnectTime();
+    private final int CACHE_SIZE = getCacheSize();
+    private String mBaseUrl = getBaseUrl();
+    private Context mContext = getContext();
+    private String mCacheName = getCacheFileName();
+    private String mReleaseCer = getReleaseCertificate();
+    private String mDebugCer = getDebugCertificate();
 
-    public ApiServiceModule() {
+    public BaseApiServiceModule() {
     }
-
-    public ApiServiceModule(Context context, String baseUrl) {
-        this.mContext = context;
-        this.mBaseUrl = baseUrl;
-    }
-
-
-    @Provides
-    @Singleton
-    public Context provideContext() {
-        return mContext;
-    }
-
 
     @Provides  //dragger2提供实例注解
     @Singleton //注解实现单例
     protected Cache providesCache() {
         //添加缓存
-        File cacheFile = new File(AppApplication.getInstance().getExternalCacheDir(), "gyCache");
+        File cacheFile = new File(mContext.getExternalCacheDir(), mCacheName);
         return new Cache(cacheFile, CACHE_SIZE);
     }
 
     @Provides
     @Singleton
-    protected HttpLoggingInterceptor providesHttpLoggingInterceptor() {
+    protected  HttpLoggingInterceptor providesHttpLoggingInterceptor() {
         //配置日记拦截器
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -209,9 +196,9 @@ public class ApiServiceModule {
         try {
             InputStream inputStream;
             if (BuildConfig.DEBUG) {
-                inputStream = context.getAssets().open("cer/certificate.cer");   //测试服务器证书
+                inputStream = context.getAssets().open(mDebugCer);   //测试服务器证书
             } else {
-                inputStream = context.getAssets().open("cer/certificate.cer");      //正式环境证书
+                inputStream = context.getAssets().open(mReleaseCer);      //正式环境证书
             }
 
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
@@ -344,4 +331,5 @@ public class ApiServiceModule {
                 .client(okHttpClient)  //配置客户端
                 .build();
     }
+
 }

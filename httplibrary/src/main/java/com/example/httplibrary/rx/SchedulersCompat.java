@@ -1,12 +1,11 @@
 package com.example.httplibrary.rx;
 
-import com.example.mvvmdemo.base.api.bean.ErrorResultBean;
-import com.example.mvvmdemo.base.api.bean.ResultBean;
-import com.example.mvvmdemo.base.api.exception.ServerApiException;
+
+import com.example.httplibrary.bean.ErrorResultBean;
+import com.example.httplibrary.bean.ResultBean;
+import com.example.httplibrary.exception.ServerApiException;
 import com.google.gson.Gson;
-
 import java.io.IOException;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;

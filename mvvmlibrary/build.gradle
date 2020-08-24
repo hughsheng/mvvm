@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion BuildConfig.compileSdkVersion
@@ -28,11 +31,22 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    compileOnly Android.meteria
     compileOnly AndroidX.appcompat
     testCompileOnly Depend.junit
     androidTestCompileOnly Depend.androidTestJunit
     androidTestCompileOnly Depend.espressoCore
 
+    //hilt
+    implementation Hilt.daggerRuntime
+    kapt Hilt.daggerCompiler
+    implementation Hilt.viewModule
+    kapt Hilt.compiler
+
+
     implementation AndroidX.lifeCycleExtension
     implementation AndroidX.lifecycleRuntime
+
+    implementation SpinKit.runtime
+
 }

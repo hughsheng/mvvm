@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion BuildConfig.compileSdkVersion
@@ -29,4 +32,21 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    implementation Hilt.daggerRuntime
+    kapt Hilt.daggerCompiler
+    implementation Hilt.viewModule
+    kapt Hilt.compiler
+
+    implementation Retrofit.runtime
+    implementation Retrofit.gson
+    implementation Retrofit.adapter
+    implementation Retrofit.logging
+
+    implementation Glide.runtime
+    implementation Glide.okhttp3Integration
+    implementation Glide.annotations
+    annotationProcessor Glide.compiler
+
+    implementation Rxandroid.rxjava2
+    implementation Rxandroid.rxandroid
 }

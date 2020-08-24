@@ -1,5 +1,5 @@
 object BuildConfig {
-    const val minSdkVersion = 19
+    const val minSdkVersion = 24
     const val targetSdkVersion = 29
     const val compileSdkVersion = 29
     const val buildToolsVersion = "29.0.3"
@@ -43,6 +43,7 @@ object Versions {
     const val rxandroid = "2.1.1"
     const val autosize = "1.1.2"
     const val bugly = "latest.release"
+    const val spinKit = "1.4.0"
 }
 
 object AndroidX {
@@ -96,6 +97,10 @@ object Coil {
 object Leakcanary {
     const val open = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
     const val close = "com.squareup.leakcanary:leakcanary-android-no-op:${Versions.leakcanary}"
+}
+
+object SpinKit {
+    const val runtime = "com.github.ybq:Android-SpinKit:${Versions.spinKit}"
 }
 
 object Rxandroid {
