@@ -2,31 +2,81 @@ package com.example.httplibrary;
 
 import android.content.Context;
 
+import com.example.httplibrary.interceptor.CacheInterceptor;
+import com.example.httplibrary.interceptor.HeadInterceptor;
+import com.example.httplibrary.interceptor.ParamsInterceptor;
+import com.example.httplibrary.interceptor.ResponseInterceptor;
+import com.example.httplibrary.interceptor.VerificationInterceptor;
+
+import java.security.KeyStore;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+
+import dagger.hilt.android.qualifiers.ApplicationContext;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+
 /**
  * created by tl
  * created at 2020/8/24
  * okhttp参数设置接口
  */
-interface HttpSettingImpl {
+public interface HttpSettingImpl {
+    Cache getCache(Context mContext);
 
-    int getCatchTime();//设置缓存时间
+    HttpLoggingInterceptor getHttpLoggingInterceptor();
 
-    int getReadTime();//设置读取时间
+    HeadInterceptor getHeadInterceptor();
 
-    int getWriteTime();//设置写时间
+    ParamsInterceptor getParamsInterceptor();
 
-    int getConnectTime();//设置连接时间
+    CacheInterceptor getCacheInterceptor();
 
-    int getCacheSize();//设置缓存大小
+    VerificationInterceptor getVerificationInterceptor();
 
-    String getBaseUrl();//设置baseUrl
+    ResponseInterceptor getResponseInterceptor();
 
-    Context getContext();
+    X509TrustManager getX509TrustManager(TrustManagerFactory trustManagerFactory);
 
-    String getCacheFileName();
+    SSLSocketFactory getSSLSocketFactory(TrustManagerFactory trustManagerFactory);
 
-    String getReleaseCertificate();//正式环境证书地址
+    SSLSocketFactory getDebugSSLSocketFactory(TrustManagerFactory trustManagerFactory);
 
-    String getDebugCertificate();//测试环境证书地址
+    TrustManagerFactory getTrustManagerFactory(KeyStore keyStore);
 
+    KeyStore getKeyStore(Context context);
+
+    HostnameVerifier getHostnameVerifier();
+
+    OkHttpClient getOkHttpClient(SSLSocketFactory sslSocketFactory,
+                                 X509TrustManager x509TrustManager,
+                                 HttpLoggingInterceptor loggingInterceptor,
+                                 HeadInterceptor headInterceptor,
+                                 ParamsInterceptor paramsInterceptor,
+                                 CacheInterceptor cacheInterceptor,
+                                 ResponseInterceptor responseInterceptor,
+                                 VerificationInterceptor verificationInterceptor,
+                                 HostnameVerifier homeNameVerifier,
+                                 Cache cache);
+
+    OkHttpClient getDebugOkHttpClient(SSLSocketFactory sslSocketFactory,
+                                      X509TrustManager x509TrustManager,
+                                      HttpLoggingInterceptor loggingInterceptor,
+                                      HeadInterceptor headInterceptor,
+                                      ParamsInterceptor paramsInterceptor,
+                                      CacheInterceptor cacheInterceptor,
+                                      ResponseInterceptor responseInterceptor,
+                                      VerificationInterceptor verificationInterceptor,
+                                      HostnameVerifier homeNameVerifier,
+                                      Cache cache);
+
+
+    Retrofit getRetrofit(OkHttpClient okHttpClient);
+
+    Retrofit getDebugRetrofit(OkHttpClient okHttpClient);
 }

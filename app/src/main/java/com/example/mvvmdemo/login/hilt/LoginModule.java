@@ -1,12 +1,10 @@
 package com.example.mvvmdemo.login.hilt;
 
-import androidx.hilt.lifecycle.ViewModelInject;
 
-import com.example.mvvmdemo.login.data.LoginRepository;
-import com.example.mvvmlibrary.base.BaseRepository;
-import com.example.mvvmlibrary.base.BaseViewModel;
-
+import com.example.mvvmdemo.base.BaseModule;
+import com.example.mvvmdemo.login.api.LoginApiService;
 import dagger.Module;
+import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ActivityComponent;
 
@@ -16,14 +14,11 @@ import dagger.hilt.android.components.ActivityComponent;
  */
 @Module
 @InstallIn(ActivityComponent.class)
-public class LoginModule extends BaseViewModel {
+public class LoginModule extends BaseModule {
 
-    private LoginRepository loginRepository;
-
-    @ViewModelInject
-    public LoginModule(LoginRepository loginRepository) {
-        this.loginRepository = loginRepository;
+    @Provides
+    public LoginApiService providesLoginApiService() {
+        return retrofit.create(LoginApiService.class);
     }
-
 
 }

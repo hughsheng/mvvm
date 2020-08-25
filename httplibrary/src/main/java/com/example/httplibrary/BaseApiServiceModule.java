@@ -32,6 +32,7 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -43,38 +44,36 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by tl on 2018-8-9
  * 管理retrofit网络库的全局代理module
  */
-@Module
-@InstallIn(ApplicationComponent.class)
-public abstract class BaseApiServiceModule implements HttpSettingImpl {
+//@Module
+//@InstallIn(ApplicationComponent.class)
+public class BaseApiServiceModule {
 
     /**
      * okhttp的一些参数设置常量(秒级单位)
      */
-    private final int CACHE_TIME = getCatchTime();  //无网络保存缓存数据时间
-    private final int READ_TIME = getReadTime();
-    private final int WRITE_TIME = getWriteTime();
-    private final int CONNECT_TIME = getConnectTime();
-    private final int CACHE_SIZE = getCacheSize();
-    private String mBaseUrl = getBaseUrl();
-    private Context mContext = getContext();
-    private String mCacheName = getCacheFileName();
-    private String mReleaseCer = getReleaseCertificate();
-    private String mDebugCer = getDebugCertificate();
+    protected final int CACHE_TIME = 24 * 60 * 60;                 //设置缓存时间
+    protected final int READ_TIME = 180;                           //设置读取时间
+    protected final int WRITE_TIME = 180;                          //设置写时间
+    protected final int CONNECT_TIME = 5;                          //设置连接时间
+    protected final int CACHE_SIZE = 1024 * 1024 * 50;               //设置缓存大小
+    protected final String mBaseUrl = "https://106.52.80.126:8010/"; //设置baseUrl
+    protected final String mCacheName = "mCache";                   //缓存文件名
+    protected final String mReleaseCer = "cer/certificate.cer";  //正式环境证书地址
+    protected final String mDebugCer = "cer/certificate.cer";      //测试环境证书地址
 
-    public BaseApiServiceModule() {
-    }
 
-    @Provides  //dragger2提供实例注解
-    @Singleton //注解实现单例
-    protected Cache providesCache() {
+
+//    @Provides  //dragger2提供实例注解
+//    @Singleton //注解实现单例
+    protected Cache providesCache(Context mContext) {
         //添加缓存
         File cacheFile = new File(mContext.getExternalCacheDir(), mCacheName);
         return new Cache(cacheFile, CACHE_SIZE);
     }
 
-    @Provides
-    @Singleton
-    protected  HttpLoggingInterceptor providesHttpLoggingInterceptor() {
+//    @Provides
+//    @Singleton
+    protected HttpLoggingInterceptor providesHttpLoggingInterceptor() {
         //配置日记拦截器
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -82,38 +81,38 @@ public abstract class BaseApiServiceModule implements HttpSettingImpl {
     }
 
 
-    @Provides
-    @Singleton
+//    @Provides
+//    @Singleton
     protected HeadInterceptor providesHeadInterceptor() {
         return new HeadInterceptor();
     }
 
-    @Provides
-    @Singleton
+//    @Provides
+//    @Singleton
     protected ParamsInterceptor providesParamsInterceptor() {
         return new ParamsInterceptor();
     }
 
-    @Provides
-    @Singleton
+//    @Provides
+//    @Singleton
     protected CacheInterceptor providesCacheInterceptor() {
         return new CacheInterceptor(CACHE_TIME);
     }
 
-    @Provides
-    @Singleton
-    VerificationInterceptor verificationInterceptor() {
+//    @Provides
+//    @Singleton
+    protected VerificationInterceptor providesVerificationInterceptor() {
         return new VerificationInterceptor();
     }
 
-    @Provides
-    @Singleton
-    ResponseInterceptor responseInterceptor() {
+//    @Provides
+//    @Singleton
+   protected ResponseInterceptor providesResponseInterceptor() {
         return new ResponseInterceptor();
     }
 
-    @Provides
-    @Singleton
+//    @Provides
+//    @Singleton
     protected X509TrustManager providesTrustManagerForCertificates(TrustManagerFactory
                                                                            trustManagerFactory) {
 
@@ -144,8 +143,8 @@ public abstract class BaseApiServiceModule implements HttpSettingImpl {
      * 。如果只是服务器传输数据给客户端来验证，就传入第一个参数就可以，客户端构建环境就传入第二个参数。
      * 双向认证的话，就同时使用两个管理器。
      */
-    @Provides
-    @Singleton
+//    @Provides
+//    @Singleton
     protected SSLSocketFactory providesSSLSocketFactory(TrustManagerFactory trustManagerFactory) {
         //Create an SSLContext that uses our TrustManager
         try {
@@ -160,9 +159,9 @@ public abstract class BaseApiServiceModule implements HttpSettingImpl {
 
 
     //测试环境去掉证书认证
-    @Provides
-    @Singleton
-    @Named(BuildConfig.BUILD_TYPE)
+//    @Provides
+//    @Singleton
+//    @Named(BuildConfig.BUILD_TYPE)
     protected SSLSocketFactory providesDebugSSLSocketFactory(TrustManagerFactory trustManagerFactory) {
         //Create an SSLContext that uses our TrustManager
         try {
@@ -176,8 +175,8 @@ public abstract class BaseApiServiceModule implements HttpSettingImpl {
     }
 
 
-    @Provides
-    @Singleton
+//    @Provides
+//    @Singleton
     protected TrustManagerFactory providesTrustManagerFactory(KeyStore keyStore) {
         try {
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
@@ -190,8 +189,8 @@ public abstract class BaseApiServiceModule implements HttpSettingImpl {
         return null;
     }
 
-    @Provides
-    @Singleton
+//    @Provides
+//    @Singleton
     protected KeyStore providesNewEmptyKeyStore(Context context) {
         try {
             InputStream inputStream;
@@ -230,8 +229,8 @@ public abstract class BaseApiServiceModule implements HttpSettingImpl {
     }
 
 
-    @Provides
-    @Singleton
+//    @Provides
+//    @Singleton
     protected HostnameVerifier providesHostNameVerifier() {
         return new HostnameVerifier() {
             @Override
@@ -242,8 +241,8 @@ public abstract class BaseApiServiceModule implements HttpSettingImpl {
     }
 
 
-    @Provides
-    @Singleton
+//    @Provides
+//    @Singleton
     protected OkHttpClient providesOkHttpClient(
             SSLSocketFactory sslSocketFactory,
             X509TrustManager x509TrustManager,
@@ -275,9 +274,9 @@ public abstract class BaseApiServiceModule implements HttpSettingImpl {
     }
 
 
-    @Provides
-    @Singleton
-    @Named(BuildConfig.BUILD_TYPE)
+//    @Provides
+//    @Singleton
+//    @Named(BuildConfig.BUILD_TYPE)
     protected OkHttpClient providesDebugOkHttpClient(
             @Named(BuildConfig.BUILD_TYPE) SSLSocketFactory sslSocketFactory,
             X509TrustManager x509TrustManager,
@@ -309,8 +308,8 @@ public abstract class BaseApiServiceModule implements HttpSettingImpl {
     }
 
 
-    @Provides
-    @Singleton
+//    @Provides
+//    @Singleton
     protected Retrofit providesRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())        //配置Gson
@@ -320,9 +319,9 @@ public abstract class BaseApiServiceModule implements HttpSettingImpl {
                 .build();
     }
 
-    @Provides
-    @Singleton
-    @Named(BuildConfig.BUILD_TYPE)
+//    @Provides
+//    @Singleton
+//    @Named(BuildConfig.BUILD_TYPE)
     protected Retrofit providesDebugRetrofit(@Named(BuildConfig.BUILD_TYPE) OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())        //配置Gson

@@ -11,18 +11,29 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 /**
  * created by tl
  * created at 2020/8/12
  */
-public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment {
-    private T binding;
+public abstract class BaseFragment extends Fragment {
+
+    protected View rootView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, getLayoutID(), container, false);
-        return binding.getRoot();
+        if (null != rootView) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (null != parent) {
+                parent.removeView(rootView);
+            }
+        } else {
+            rootView = inflater.inflate(getLayoutID(), container, false);
+        }
+        return rootView;
     }
 
     @Override
@@ -35,12 +46,5 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment {
 
     protected abstract void init();
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (binding != null) {
-            binding.unbind();
-        }
-    }
 
 }

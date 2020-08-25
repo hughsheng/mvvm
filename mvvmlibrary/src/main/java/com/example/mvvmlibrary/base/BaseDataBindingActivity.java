@@ -6,6 +6,9 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -19,8 +22,11 @@ public abstract class BaseDataBindingActivity<V extends ViewDataBinding, VM exte
     protected VM viewModel;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void init() {
+        initDataBinding();
+    }
+
+    private void initDataBinding() {
         binding = DataBindingUtil.setContentView(this, getLayoutID());
 
         Class modelClass;
@@ -38,8 +44,10 @@ public abstract class BaseDataBindingActivity<V extends ViewDataBinding, VM exte
         }
 
         viewModel = (VM) getDefaultViewModelProviderFactory().create(modelClass);
-        init();
     }
+
+    protected abstract void initData();
+
 
 
     @Override

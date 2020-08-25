@@ -21,12 +21,17 @@ import com.google.android.material.snackbar.Snackbar;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private AlertDialog loadingDialog;
+    protected FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(getLayoutID());
+        fragmentManager = getSupportFragmentManager();
+        init();
     }
+
+
 
     protected View getRootView() {
         return ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);

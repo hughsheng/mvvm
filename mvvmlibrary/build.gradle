@@ -49,4 +49,10 @@ dependencies {
 
     implementation SpinKit.runtime
 
+
+    //retrofit
+    implementation Retrofit.runtime
+    implementation Retrofit.gson
+    implementation Retrofit.adapter
+    implementation Retrofit.logging
 }

@@ -6,6 +6,8 @@ import com.example.httplibrary.rx.SchedulersCompat;
 import com.example.mvvmdemo.login.api.LoginApiService;
 import com.example.mvvmlibrary.base.BaseRepository;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -20,6 +22,7 @@ import okhttp3.RequestBody;
 public class LoginRepository extends BaseRepository {
     private LoginApiService loginApiService;
 
+    @Inject
     public LoginRepository(LoginApiService loginApiService) {
         this.loginApiService = loginApiService;
     }

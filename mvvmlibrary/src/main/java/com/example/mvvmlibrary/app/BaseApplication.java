@@ -10,20 +10,7 @@ import android.view.WindowManager;
  * created at 2020/8/20
  */
 public class BaseApplication extends Application {
-    private static BaseApplication application;//把application设置为静态对象
     private int width = 0, height = 0;
-    public static BaseApplication getInstance() {
-        return application;
-    }
-
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        application = this;
-    }
-
-
 
     private void initProperty() {
         DisplayMetrics metric = new DisplayMetrics();
