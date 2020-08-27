@@ -1,7 +1,7 @@
 package com.example.mvvmdemo.home.data;
 
 import androidx.hilt.lifecycle.ViewModelInject;
-import com.example.mvvmlibrary.base.BaseViewModel;
+import com.example.mvvmlibrary.base.data.BaseViewModel;
 
 /**
  * created by tl

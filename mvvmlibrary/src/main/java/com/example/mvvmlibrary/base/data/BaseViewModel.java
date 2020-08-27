@@ -1,11 +1,7 @@
-package com.example.mvvmlibrary.base;
+package com.example.mvvmlibrary.base.data;
 
-import androidx.hilt.lifecycle.ViewModelInject;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.mvvmlibrary.data.SingleLiveEvent;
-
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -22,7 +18,8 @@ public class BaseViewModel extends ViewModel {
     private SingleLiveEvent<String> netWorkError; //网络或接口报错
 
     public SingleLiveEvent<String> getShowLoading() {
-        return createLiveData(showLoading);
+        showLoading=createLiveData(showLoading);
+        return showLoading;
     }
 
     public SingleLiveEvent<Void> getHideLoading() {
@@ -31,7 +28,8 @@ public class BaseViewModel extends ViewModel {
     }
 
     public SingleLiveEvent<String> getNetWorkError() {
-        return createLiveData(netWorkError);
+        netWorkError=createLiveData(netWorkError);
+        return netWorkError;
     }
 
     private <T> SingleLiveEvent<T> createLiveData(SingleLiveEvent<T> liveData) {

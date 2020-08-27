@@ -1,21 +1,32 @@
 package com.example.mvvmdemo.login.ui;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.widget.Toast;
-
+import android.view.View;
+import androidx.annotation.NonNull;
 import com.example.mvvmdemo.R;
 import com.example.mvvmdemo.databinding.FragmentLoginBinding;
 import com.example.mvvmdemo.login.data.LoginViewModel;
-import com.example.mvvmlibrary.base.BaseDataBindingFragment;
-import com.example.mvvmlibrary.data.SingleLiveEvent;
+import com.example.mvvmlibrary.base.fragment.BaseDataBindingFragment;
 
 /**
  * created by tl
  * created at 2020/8/24
  */
-public class LoginFragment extends BaseDataBindingFragment<FragmentLoginBinding, LoginViewModel> {
+
+public class LoginFragment extends BaseDataBindingFragment<FragmentLoginBinding> {
+
+    private LoginViewModel viewModel;
 
     public static final String TAG = "LoginFragment";
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (getActivity() != null) {
+            viewModel = ((LoginActivity) getActivity()).getViewModel();
+        }
+    }
 
     public static LoginFragment newInstance() {
 
@@ -33,9 +44,14 @@ public class LoginFragment extends BaseDataBindingFragment<FragmentLoginBinding,
 
     @Override
     protected void init() {
-        SingleLiveEvent<String> sss=viewModel.getShowLoading();
-        sss.setValue("121212121");
-        String str=viewModel.getShowLoading().getValue();
-        Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
+        binding.loginTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = binding.nameEt.getText().toString();
+                String pwd = binding.pwdEt.getText().toString();
+                viewModel.checkLogin(name, pwd);
+            }
+        });
     }
+
 }

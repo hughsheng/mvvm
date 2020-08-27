@@ -1,18 +1,15 @@
 package com.example.mvvmdemo.home.ui;
 
-import androidx.databinding.ViewDataBinding;
-
 import com.example.mvvmdemo.R;
-import com.example.mvvmdemo.home.data.MainViewModel;
-import com.example.mvvmdemo.home.data.UserBean;
 import com.example.mvvmdemo.databinding.ActivityMainBinding;
-import com.example.mvvmlibrary.base.BaseDataBindingActivity;
-import com.example.mvvmlibrary.base.BaseViewBindingActivity;
+import com.example.mvvmdemo.home.data.MainViewModel;
+import com.example.mvvmlibrary.base.activity.BaseDataBindingActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class MainViewBindingActivity extends BaseViewBindingActivity<ActivityMainBinding> {
+public class MainViewBindingActivity extends BaseDataBindingActivity<ActivityMainBinding, MainViewModel> {
+
 
     @Override
     protected int getLayoutID() {
@@ -20,7 +17,12 @@ public class MainViewBindingActivity extends BaseViewBindingActivity<ActivityMai
     }
 
     @Override
-    protected void init() {
-        ActivityMainBinding.inflate(getLayoutInflater());
+    protected void initData() {
+
+    }
+
+    @Override
+    public MainViewModel getViewModel() {
+        return null;
     }
 }

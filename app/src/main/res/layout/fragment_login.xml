@@ -293,7 +293,8 @@
                 android:layout_marginBottom="32dp"
                 android:text="一  机  在  手      尽  在  掌  握  之  中"
                 android:textColor="#D8D8D8"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                />
         </RelativeLayout>
     </LinearLayout>
 </layout>

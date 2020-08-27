@@ -1,4 +1,4 @@
-package com.example.mvvmlibrary.base;
+package com.example.mvvmlibrary.base.activity;
 
 import android.os.Bundle;
 import android.view.Gravity;
@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.mvvmlibrary.util.AlertDialogUtils;
 import com.google.android.material.snackbar.Snackbar;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * created by tl

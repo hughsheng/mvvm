@@ -1,9 +1,15 @@
 package com.example.mvvmdemo.login.data;
 
 import androidx.hilt.lifecycle.ViewModelInject;
+
 import com.example.httplibrary.bean.ErrorResultBean;
 import com.example.httplibrary.rx.SchedulersCompat;
-import com.example.mvvmlibrary.base.BaseViewModel;
+import com.example.mvvmlibrary.base.data.BaseViewModel;
+import com.google.gson.Gson;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -14,18 +20,32 @@ import okhttp3.RequestBody;
  * created by tl
  * created at 2020/8/25
  */
+
 public class LoginViewModel extends BaseViewModel {
-    private LoginRepository loginRepository;
+
+    public LoginRepository loginRepository;
     private LoginBean loginBean;
-
-    public LoginViewModel() {
-
-    }
 
     @ViewModelInject
     public LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
     }
+
+    public void checkLogin(String name, String pwd) {
+        if (!name.equals("") && !pwd.equals("")) {
+            LoginBody loginBody = new LoginBody();
+            loginBody.setAccount(name);
+            loginBody.setPassword(pwd);
+            loginBody.setDeviceId("android");
+            String str = new Gson().toJson(loginBody);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; " +
+                    "charset=utf-8"), str);
+            login(body);
+        } else {
+            getNetWorkError().setValue("请输入完整信息");
+        }
+    }
+
 
     public void login(RequestBody requestBody) {
         Disposable disposable = loginRepository.getLoginData(requestBody)
@@ -47,6 +67,7 @@ public class LoginViewModel extends BaseViewModel {
                     @Override
                     public void accept(Object o) throws Exception {
                         loginBean = (LoginBean) o;
+                        getNetWorkError().setValue("登录成功");
                     }
                 }, new ErrorResultBean() {
                     @Override
